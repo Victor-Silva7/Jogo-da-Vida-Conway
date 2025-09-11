@@ -1,4 +1,4 @@
-from lib.lib import fft_convolve2d # Corrected import path
+from lib.lib import fft_convolve2d # Caminho de importação corrigido
 import unittest
 import numpy as np
 
