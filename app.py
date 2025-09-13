@@ -8,21 +8,23 @@ from typing import Tuple, Dict, Optional, Generator, Union
 # --- Parâmetros de Simulação ---
 DEFAULT_BOARD_SIZE = 100 # Tamanho de borda padrão para a placa quadrada
 DISPLAY_SIZE: Tuple[int, int] = (400, 400) # Tamanho alvo para exibição
-INITIAL_FILL_FACTOR: float = 0.3 # Porcentagem de células inicialmente vivas
+INITIAL_FILL_FACTOR: float = 0.5 # Porcentagem de células inicialmente vivas
 DEFAULT_BOUNDARY: str = 'wrap' # Condição de contorno padrão
 
 # --- Conjuntos de regras predefinidos ---
 PREDEFINED_RULESETS: Dict[str, str] = {
-    "Conway's Game of Life": "B3/S23",
-    "HighLife": "B36/S23",
-    "Day & Night": "B3678/S34678",
-    "Replicator": "B1357/S1357",
-    "Seeds": "B2/S",
-    "Maze": "B3/S12345",
-    "Walled Cities": "B45678/S2345",
+    "Jogo da Vida de Conway": "B3/S23",
+    "Cidade com Muralhas": "B45678/S2345",
     "2x2": "B36/S125",
+    "Lendário": "B357/S246",
+    "Cidade de Cristal": "B5678/S35678"
 }
-DEFAULT_RULESET_NAME = "Conway's Game of Life"
+'''
+B357 = Uma célula morta se torna viva se 3,5 ou 7 vizinhos estiverem vivos
+S246 = Uma célula viva se mantém viva se 2,4 ou 6 vizinhos estiverem vivos
+'''
+
+DEFAULT_RULESET_NAME = "Jogo da Vida de Conway"
 DEFAULT_RULESET_STRING: str = PREDEFINED_RULESETS[DEFAULT_RULESET_NAME]
 
 # --- Funções auxiliares ---
@@ -32,7 +34,7 @@ def scale_board(board_array: Optional[np.ndarray], target_size: Tuple[int, int] 
         return np.zeros(target_size, dtype=np.uint8)
     if board_array.ndim == 2:
         try:
-            img = Image.fromarray(board_array.astype(np.uint8), mode='L')
+            img = Image.fromarray(board_array.astype(np.uint8))
             img_resized = img.resize(target_size, Image.NEAREST)
             return np.array(img_resized)
         except Exception as e:
@@ -274,4 +276,17 @@ with gr.Blocks() as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch()
+    print("🚀 Iniciando simulador de autômatos celulares...")
+    print("📊 Configurações padrão:")
+    print(f"   - Tamanho do tabuleiro: {DEFAULT_BOARD_SIZE}x{DEFAULT_BOARD_SIZE}")
+    print(f"   - Regra padrão: {DEFAULT_RULESET_STRING}")
+    print(f"   - Condição de contorno: {DEFAULT_BOUNDARY}")
+    print("🌐 Abrindo interface web...")
+    
+    demo.launch(
+        server_name="127.0.0.1",
+        server_port=7862, #É um número de apartamento em um prédio por exenplo
+        share=False,
+        debug=True,
+        show_error=True
+    )
